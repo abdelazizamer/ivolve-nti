@@ -45,3 +45,4 @@
    docker rm -f container2
    ```
 
+<img width="1224" height="241" alt="Screenshot 2026-10-21 042616" src="https://github.com/user-attachments/assets/7a2a4e0e-2902-413a-9597-60f89063e84b" />
