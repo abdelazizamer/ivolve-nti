@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iVolve Lab 8</title>
+  <style>
+    body { font: 16px Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 18px; color: #202938; }
+    header { display: flex; align-items: center; gap: 12px; }
+    header img { width: 48px; height: 48px; }
+    form { display: flex; gap: 8px; margin: 24px 0; }
+    input { flex: 1; padding: 10px; }
+    button { padding: 10px 16px; cursor: pointer; }
+    li { padding: 8px 0; border-bottom: 1px solid #ddd; }
+    #status { color: #18794e; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/assets/ivolve-logo.svg" alt="iVolve logo">
+    <h1>iVolve Messages</h1>
+  </header>
+  <p id="status">Connecting to the application...</p>
+  <form id="message-form">
+    <input id="message" maxlength="255" placeholder="Write a message" required>
+    <button type="submit">Send</button>
+  </form>
+  <ul id="messages"></ul>
+  <script>
+    const statusText = document.getElementById("status");
+    const list = document.getElementById("messages");
+
+    async function loadMessages() {
+      const response = await fetch("/api/messages");
+      const messages = await response.json();
+      list.replaceChildren(...messages.map(item => {
+        const li = document.createElement("li");
+        li.textContent = item.message;
+        return li;
+      }));
+      statusText.textContent = "Connected to MySQL";
+    }
+
+    document.getElementById("message-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      const input = document.getElementById("message");
+      const response = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input.value })
+      });
+      if (response.ok) {
+        input.value = "";
+        await loadMessages();
+      }
+    });
+
+    loadMessages().catch(() => {
+      statusText.textContent = "Could not connect to the application";
+    });
+  </script>
+</body>
+</html>
