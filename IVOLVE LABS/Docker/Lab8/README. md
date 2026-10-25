@@ -1,0 +1,133 @@
+# Lab 8 — Node.js and MySQL with Docker Compose
+
+This guide documents the Lab 8 setup. The final files belong in your `ivolve-nti` repository. The `iVolveApp` repository in the assignment is the source for the required application.
+
+## 1. Create the Lab 8 directory in your repository
+
+```bash
+cd ~/ivolve-nti
+mkdir -p "IVOLVE LABS/Docker/Lab8"
+cd "IVOLVE LABS/Docker/Lab8"
+```
+
+## 2. Download the reference application and copy its files into Lab 8
+
+The temporary directory is only used to obtain the application files. Keep your repository's `origin` unchanged; the final files remain under `~/ivolve-nti/IVOLVE LABS/Docker/Lab8`.
+
+```bash
+git clone https://github.com/Ibrahim-Adel15/iVolveApp.git /tmp/ivolveapp-lab8-reference
+cp -a /tmp/ivolveapp-lab8-reference/frontend .
+cp /tmp/ivolveapp-lab8-reference/Dockerfile \
+   /tmp/ivolveapp-lab8-reference/db.js \
+   /tmp/ivolveapp-lab8-reference/package.json \
+   /tmp/ivolveapp-lab8-reference/server.js .
+```
+
+Expected files include `frontend/index.html`, `frontend/assets/ivolve-logo.png`, `Dockerfile`, `db.js`, `package.json`, and `server.js`.
+
+## 3. Create the Docker Compose configuration
+
+Create or update `docker-compose.yml` inside the Lab 8 directory:
+
+```yaml
+services:
+  app:
+    build: .
+    image: lab8-app:latest
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_USER: ivolve_user
+      DB_PASSWORD: lab8password
+      DB_NAME: ivolve
+    volumes:
+      - app_logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ivolve-net
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootLab8password
+      MYSQL_DATABASE: ivolve
+      MYSQL_USER: ivolve_user
+      MYSQL_PASSWORD: lab8password
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ivolve-net
+
+volumes:
+  app_logs:
+  db_data:
+
+networks:
+  ivolve-net:
+    driver: bridge
+```
+
+## 4. Validate the configuration and start the application
+
+Run these commands from the Lab 8 directory:
+
+```bash
+docker compose config
+docker compose up -d --build
+docker compose ps
+docker compose logs --tail=40 app
+```
+
+Confirm that `db` is `healthy`, `app` is `Up`, and host port 3000 is mapped to container port 3000.
+
+## 5. Verify the application and database connection
+
+```bash
+curl http://localhost:3000/health
+curl http://localhost:3000/ready
+```
+
+Open `http://localhost:3000` in a browser inside the VM to view the application. Successful health and readiness responses confirm that the application is running and connected to the database.
+
+## 6. Push the Lab 8 files to your GitHub repository
+
+```bash
+cd ~/ivolve-nti
+git status --short
+git add -- "IVOLVE LABS/Docker/Lab8"
+git commit -m "Update Docker Lab 8 to iVolveApp"
+git pull --rebase origin main
+git push origin main
+```
+
+The `git add` command stages only the Lab 8 directory, leaving unrelated files such as `Lab7/backend-data` unstaged.
+
+## 7. Push the application image to Docker Hub
+
+Replace `DOCKERHUB_USERNAME` with your Docker Hub username. Create the `ivolve-app` repository on Docker Hub first if it does not already exist.
+
+```bash
+docker login -u DOCKERHUB_USERNAME
+docker tag lab8-app:latest DOCKERHUB_USERNAME/ivolve-app:lab8
+docker push DOCKERHUB_USERNAME/ivolve-app:lab8
+```
+
+Enter your password or Personal Access Token when `docker login` prompts in the terminal.
+
+## 8. Stop the services after finishing
+
+```bash
+docker compose down
+```
+
+This removes the containers and network while retaining the MySQL volume. Do not use `docker compose down -v` unless you also intend to delete the database data.
+
+
