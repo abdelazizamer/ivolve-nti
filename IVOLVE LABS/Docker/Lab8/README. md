@@ -130,4 +130,3 @@ docker compose down
 
 This removes the containers and network while retaining the MySQL volume. Do not use `docker compose down -v` unless you also intend to delete the database data.
 
-
