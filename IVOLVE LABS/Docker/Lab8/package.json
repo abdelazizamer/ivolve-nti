@@ -1,0 +1,13 @@
+{
+  "name": "ivolve-lab8",
+  "version": "1.0.0",
+  "description": "Node.js and MySQL application for Docker Compose Lab 8",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.14.0"
+  }
+}
