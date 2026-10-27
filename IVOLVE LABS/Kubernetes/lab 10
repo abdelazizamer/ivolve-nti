@@ -1,0 +1,83 @@
+Kubernetes Lab 10: Node Isolation Using Taints and Labels
+
+## Objective
+
+Apply a `NoSchedule` taint and a project label to the Kubernetes worker node, then verify both settings.
+
+## Concepts
+
+- **Taint:** Marks a node so that Pods without a matching toleration are not scheduled there.
+- **Toleration:** Allows a Pod to be scheduled on a node with a matching taint. A toleration does not select the node by itself.
+- **`NoSchedule`:** Prevents new Pods without a matching toleration from being scheduled on the node. Existing Pods are not evicted.
+- **Label:** A key-value tag used to identify and select nodes.
+- **Node selector and node affinity:** Pod scheduling rules that can select nodes based on labels. This lab only applies and verifies a label; it does not require deploying a Pod.
+
+## Cluster node used
+
+The worker node in this cluster is named `k8s-worker`. Confirm node names before running the commands:
+
+```bash
+kubectl get nodes -o wide
+```
+
+Run all commands below from a terminal with working `kubectl` access to the control plane.
+
+## 1. Apply the taint
+
+```bash
+kubectl taint nodes k8s-worker workload=ivolveApp:NoSchedule --overwrite
+```
+
+Expected confirmation:
+
+```text
+node/k8s-worker modified
+```
+
+The taint prevents new Pods without a matching toleration from being scheduled on the worker.
+
+## 2. Apply the label
+
+```bash
+kubectl label nodes k8s-worker project=ivolve --overwrite
+```
+
+Expected confirmation:
+
+```text
+node/k8s-worker labeled
+```
+
+The label identifies the worker as part of the `ivolve` project and can be used by Pod scheduling rules such as `nodeSelector` or node affinity.
+
+## 3. Verify the taint and label
+
+Inspect the node details:
+
+```bash
+kubectl describe node k8s-worker
+```
+
+In the output, confirm the taint:
+
+```text
+Taints: workload=ivolveApp:NoSchedule
+```
+
+Display the label in the node list:
+
+```bash
+kubectl get nodes -L project
+```
+
+The `k8s-worker` row should show `ivolve` in the `PROJECT` column. To display every label, use:
+
+```bash
+kubectl get nodes --show-labels
+```
+
+Confirm both nodes remain healthy:
+
+```bash
+kubectl get nodes -o wide
+```
