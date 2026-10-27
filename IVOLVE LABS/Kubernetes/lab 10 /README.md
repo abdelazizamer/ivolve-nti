@@ -71,3 +71,5 @@ The `k8s-worker` row should show `ivolve` in the `PROJECT` column. To display al
 ```bash
 kubectl get nodes --show-labels
 ```
+<img width="960" height="1079" alt="Screenshot 2026-10-27 161037" src="https://github.com/user-attachments/assets/ba99d1d6-31d1-4707-9b1f-6df8dc6a5366" />
+
