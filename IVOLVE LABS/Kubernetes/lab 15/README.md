@@ -114,4 +114,6 @@ kubectl exec -n ivolve mysql-0 -- sh -c \
 ```
 
 Confirm the output identifies database `ivolve`, user `ivolve_user`, and a grant on `ivolve.*`.
-![Uploading image.png…]()
+
+<img width="971" height="1079" alt="image" src="https://github.com/user-attachments/assets/bdfbe65b-69eb-49b7-bec1-63acc8649b25" />
+
