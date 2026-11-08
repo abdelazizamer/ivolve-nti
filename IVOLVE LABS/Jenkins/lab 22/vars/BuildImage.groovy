@@ -8,6 +8,7 @@ def call(Map config = [:]) {
             sh '''
                 docker build --pull -t "$IMAGE_REPO:$IMAGE_TAG" .
                 trivy image \
+                    --timeout 15m \
                     --db-repository ghcr.io/aquasecurity/trivy-db:2 \
                     --scanners vuln \
                     --severity HIGH,CRITICAL \
