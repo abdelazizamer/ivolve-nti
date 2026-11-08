@@ -7,8 +7,10 @@ def call(Map config = [:]) {
         try {
             sh '''
                 docker build --pull -t "$IMAGE_REPO:$IMAGE_TAG" .
+
                 trivy image \
                     --timeout 15m \
+                    --db-repository mirror.gcr.io/aquasec/trivy-db:2 \
                     --db-repository ghcr.io/aquasecurity/trivy-db:2 \
                     --scanners vuln \
                     --severity HIGH,CRITICAL \
@@ -24,7 +26,8 @@ def call(Map config = [:]) {
                 sh '''
                     set +x
                     echo "$DOCKER_PASSWORD" | docker login \
-                        --username "$DOCKER_USERNAME" --password-stdin
+                        --username "$DOCKER_USERNAME" \
+                        --password-stdin
                     docker push "$IMAGE_REPO:$IMAGE_TAG"
                 '''
             }
