@@ -14,13 +14,19 @@ def call(Map config = [:]) {
         )]) {
             sh '''
                 set -e
-                sed -i "s|image: .*|image: ${IMAGE_REPO}:${IMAGE_TAG}|" k8s/deployment.yaml
+
+                # Update only the application image; preserve the MySQL init container image.
+                sed -i "s|image: abdelazizamer/ivolve-app:.*|image: ${IMAGE_REPO}:${IMAGE_TAG}|" k8s/deployment.yaml
+
                 export KUBECONFIG="$KUBECONFIG_FILE"
                 kubectl apply -f k8s/deployment.yaml
                 kubectl apply -f k8s/service.yaml
+
                 kubectl rollout status deployment/ivolveapp \
                     -n "$K8S_NAMESPACE" --timeout=300s
-                kubectl get deployment,pods,service -n "$K8S_NAMESPACE" -o wide
+
+                kubectl get deployment,pods,service \
+                    -n "$K8S_NAMESPACE" -o wide
             '''
         }
     }
