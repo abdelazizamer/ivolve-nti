@@ -1,4 +1,4 @@
-﻿@Library('ivolve-lab22') _
+@Library('ivolve-lab22') _
 
 pipeline {
     agent { label 'lab22-agent' }
@@ -12,7 +12,7 @@ pipeline {
 
         stage('Build App') {
             steps {
-                dir('Lab22') {
+                dir('IVOLVE LABS/Jenkins/lab 22') {
                     BuildApp()
                 }
             }
@@ -20,7 +20,7 @@ pipeline {
 
         stage('Build Image, Scan and Push') {
             steps {
-                dir('Lab22') {
+                dir('IVOLVE LABS/Jenkins/lab 22') {
                     BuildImage()
                 }
             }
@@ -28,7 +28,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                dir('Lab22') {
+                dir('IVOLVE LABS/Jenkins/lab 22') {
                     DeployOnK8s()
                 }
             }
