@@ -1,0 +1,46 @@
+﻿@Library('ivolve-lab22') _
+
+pipeline {
+    agent { label 'lab22-agent' }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build App') {
+            steps {
+                dir('Lab22') {
+                    BuildApp()
+                }
+            }
+        }
+
+        stage('Build Image, Scan and Push') {
+            steps {
+                dir('Lab22') {
+                    BuildImage()
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                dir('Lab22') {
+                    DeployOnK8s()
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Lab 22 pipeline completed successfully.'
+        }
+        failure {
+            echo 'Lab 22 pipeline failed. Check the Console Output.'
+        }
+    }
+}
