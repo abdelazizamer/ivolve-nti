@@ -135,4 +135,6 @@ ansible managed -i inventory.ini -b -m shell -a 'docker --version && kubectl ver
 ```
 
 The successful output showed Docker `29.1.3`, kubectl client `v1.37.1`, Java `21.0.13`, and `active` for both Docker and Jenkins.
+<img width="946" height="386" alt="Screenshot 2026-11-10 171107" src="https://github.com/user-attachments/assets/0365c02c-5c8f-41da-956d-0612ee4b7cf0" />
+
 
