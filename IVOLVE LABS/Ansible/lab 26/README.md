@@ -56,3 +56,4 @@ For proof that the roles ran, take a screenshot of:
 ansible-playbook -i inventory.ini site.yml
 ```
 
+<img width="950" height="1079" alt="Screenshot 2026-11-10 185918" src="https://github.com/user-attachments/assets/c8a834b6-6d44-43f0-be06-57659ca98677" />
