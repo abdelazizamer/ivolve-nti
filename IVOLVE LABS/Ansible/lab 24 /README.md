@@ -125,5 +125,7 @@ ansible managed -i inventory.ini -m ping
 ansible managed -i inventory.ini -b -m command -a "docker --version"
 ```
 
-The screenshot should show `SUCCESS` and `"ping": "pong"`, followed by `rc=0` and the Docker version. This demonstrates that Ansible can reach the Managed Node and that Docker is installed.
+<img width="954" height="194" alt="Screenshot 2026-11-10 163534" src="https://github.com/user-attachments/assets/f929f1f8-f793-492a-b624-97e7d2bb09a9" />
+<img width="846" height="114" alt="Screenshot 2026-11-10 163942" src="https://github.com/user-attachments/assets/e6e02752-72a7-482a-aeb2-0ae86dcaaee6" />
+<img width="955" height="252" alt="Screenshot 2026-11-10 163519" src="https://github.com/user-attachments/assets/adee3132-577b-445b-bf0c-823a91f812d5" />
 
