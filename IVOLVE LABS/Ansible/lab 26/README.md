@@ -1,4 +1,6 @@
-Lab 26: Structured Configuration Management with Ansible Roles
+
+# Lab 26: Structured Configuration Management with Ansible Roles
+
 
 ## Objective
 
