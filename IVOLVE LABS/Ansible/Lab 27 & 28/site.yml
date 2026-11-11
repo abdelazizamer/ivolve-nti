@@ -1,0 +1,7 @@
+---
+- name: Configure MySQL on AWS-discovered iVolve EC2 instances
+  hosts: ivolve_servers
+  become: true
+
+  roles:
+    - mysql

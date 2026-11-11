@@ -1,0 +1,23 @@
+---
+- name: Validate MySQL database access
+  hosts: ivolve_servers
+  gather_facts: false
+
+  tasks:
+    - name: List databases using the created MySQL user
+      ansible.builtin.command:
+        argv:
+          - mysql
+          - --protocol=socket
+          - -u
+          - "{{ mysql_username }}"
+          - -e
+          - SHOW DATABASES;
+      environment:
+        MYSQL_PWD: "{{ vault_mysql_password }}"
+      register: mysql_databases
+      changed_when: false
+
+    - name: Display databases
+      ansible.builtin.debug:
+        var: mysql_databases.stdout_lines
